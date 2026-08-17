@@ -64,13 +64,16 @@ const submitReview = async (req, res, next) => {
     const ipHash = req.ip || req.headers['x-forwarded-for'] || 'unknown';
     const userAgent = req.headers['user-agent'] || 'unknown';
 
+    // Auto-approve if configured in .env or default to approved for instant public visibility
+    const initialStatus = process.env.AUTO_APPROVE_REVIEWS === 'false' ? 'pending' : 'approved';
+
     const newReview = await Review.create({
       name: cleanName,
       email: cleanEmail,
       rating: parsedRating,
       review: cleanReview,
       source: validSource,
-      status: 'pending',
+      status: initialStatus,
       metadata: {
         ipHash,
         userAgent,
@@ -79,7 +82,7 @@ const submitReview = async (req, res, next) => {
 
     return res.status(201).json({
       success: true,
-      message: 'Thank you for sharing your experience with Cliffhanger The Jeans. Your review has been received successfully and will be published upon approval.',
+      message: 'Thank you for sharing your experience with Cliffhanger The Jeans. Your review has been published successfully.',
       data: {
         id: newReview._id,
         status: newReview.status,

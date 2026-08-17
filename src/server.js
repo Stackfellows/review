@@ -17,24 +17,10 @@ app.use(helmet({
   crossOriginResourcePolicy: false,
 }));
 
-// Cross-Origin Resource Sharing
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  'http://localhost:5173',
-  'http://localhost:3000',
-  'http://localhost:3400',
-  'https://cliffhangerthejeans.com',
-].filter(Boolean);
-
+// Cross-Origin Resource Sharing - Open for production frontend domain & mobile QR scans
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
-        callback(null, true);
-      } else {
-        callback(null, true); // Allow for mobile browser QR scans
-      }
-    },
+    origin: true, // Allow all requesting origins (https://reviewscliffhanger.cliffhangerthejeans.com, mobile browsers, localhost)
     credentials: true,
   })
 );
@@ -70,7 +56,7 @@ app.use(errorHandler);
 
 // Server Listener
 const PORT = process.env.PORT || 3400;
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`=================================`);
   console.log(`Cliffhanger Review API Running`);
   console.log(`Port: ${PORT}`);
@@ -78,7 +64,7 @@ const server = app.listen(PORT, () => {
   console.log(`=================================`);
 });
 
-// Graceful Shutdown for Hostinger Passenger
+// Graceful Shutdown for Passenger / Cloud servers
 process.on('SIGTERM', () => {
   console.log('SIGTERM received. Shutting down server gracefully...');
   server.close(() => {
