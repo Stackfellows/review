@@ -1,4 +1,7 @@
 const Product = require('../models/Product');
+const Subscriber = require('../models/Subscriber');
+const Review = require('../models/Review');
+const { sendNewProductEmail } = require('../utils/mailer');
 
 // Get all products
 exports.getProducts = async (req, res) => {
@@ -38,6 +41,29 @@ exports.getProduct = async (req, res) => {
 exports.createProduct = async (req, res) => {
     try {
         const product = await Product.create(req.body);
+        
+        // Asynchronously send new product email to subscribers and reviewers
+        setImmediate(async () => {
+            try {
+                // Get all active subscribers
+                const subscribers = await Subscriber.find({ isSubscribed: true }).select('email');
+                // Get all distinct reviewers emails
+                const reviewers = await Review.find({ email: { $exists: true, $ne: null } }).distinct('email');
+                
+                // Combine and deduplicate
+                const allEmails = [...new Set([
+                    ...subscribers.map(s => s.email),
+                    ...reviewers
+                ])];
+
+                if (allEmails.length > 0) {
+                    await sendNewProductEmail(allEmails, product);
+                }
+            } catch (err) {
+                console.error("Error broadcasting new product email:", err);
+            }
+        });
+
         res.status(201).json({ success: true, data: product });
     } catch (error) {
         res.status(400).json({ success: false, error: error.message });

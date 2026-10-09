@@ -8,6 +8,7 @@ const connectDB = require('./config/db');
 const { requestLogger } = require('./utils/logger');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const subscriberRoutes = require('./routes/subscriberRoutes');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const membershipRoutes = require('./routes/membershipRoutes');
@@ -45,6 +46,7 @@ connectDB();
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/subscribers', subscriberRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/membership', membershipRoutes);
