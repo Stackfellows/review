@@ -1,5 +1,9 @@
+const { logError } = require('../utils/logger');
+
 const errorHandler = (err, req, res, next) => {
-  console.error('[API Error]:', err);
+  // Log error to file & console
+  logError(err, req);
+  console.error('[API Error]:', err.message || err);
 
   // Mongoose validation error
   if (err.name === 'ValidationError') {

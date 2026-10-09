@@ -1,5 +1,2 @@
-/**
- * Hostinger Node.js Application Launcher Entry Point
- * Hostinger cPanel / Passenger looks for server.js in the app root.
- */
+// Cliffhanger Jeans Unified Backend Entry Point
 require('./src/server.js');
