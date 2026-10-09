@@ -4,6 +4,7 @@ const productSchema = new mongoose.Schema({
     name: { type: String, required: true },
     productCode: { type: String }, // e.g. CH-B001, CH-B002
     collectionName: { type: String }, // e.g. Explorer Collection, Blossom Collection
+    collection: { type: String }, // Used by new frontend form
     description: { type: String, required: true },
     price: { type: Number, required: true },
     originalPrice: { type: Number },
@@ -14,6 +15,7 @@ const productSchema = new mongoose.Schema({
     washType: { type: String }, // e.g. "Light Vintage Wash", "Dark Stone Wash"
     fabric: { type: String, default: "Premium Stretch Denim" },
     ageGroup: { type: String }, // e.g. "0-2Y", "3-5Y", "6-9Y", "10-14Y"
+    age: { type: String }, // Used by new frontend form
     images: [{ type: String }],
     sizes: [{ type: String }], // e.g. ["22", "24", "26", "28", "30", "32", "34"]
     colors: [{ type: String }],
