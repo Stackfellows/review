@@ -14,6 +14,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const membershipRoutes = require('./routes/membershipRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const homeSectionRoutes = require('./routes/homeSectionRoutes');
 
 const errorHandler = require('./middleware/errorHandler');
 const { apiLimiter } = require('./middleware/rateLimiter');
@@ -51,6 +52,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/membership', membershipRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/home-sections', homeSectionRoutes);
 app.use('/api', reviewRoutes);
 
 // Health Check Route
